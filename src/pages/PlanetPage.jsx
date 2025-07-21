@@ -13,7 +13,7 @@ export const PlanetPage = () => {
                 console.log(data.result.properties);
               setPlanet({
                     ...data.result.properties,
-                    uid: uid  // <- attach the UID manually since you're getting it from the URL
+                    uid: uid 
                 });
             })
             .catch((err) => console.error("Error fetching planet:", err));

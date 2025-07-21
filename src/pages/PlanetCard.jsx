@@ -1,9 +1,30 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 
 const PlanetCard = ({ planet }) => {
+  const { store, dispatch } = useGlobalReducer();
+  
+    const isFavorite = store.favorites.some(fav => fav.uid === planet.uid);
+  
+    const toggleFavorite = () => {
+      if (isFavorite) {
+        dispatch({
+          type: "delete_favorites",
+          payload: { removeuid: planet.uid }
+        });
+      } else {
+        dispatch({
+          type: "add_favorites",
+          payload: {
+            name: planet.name,
+            uid: planet.uid,
+            url: `/character/${planet.uid}`
+          }
+        });
+      }
+    };
+
   return (
     <div>
       <div className="card" style={{ width: "22rem", flex: "0 0 auto" }}>
@@ -23,9 +44,13 @@ const PlanetCard = ({ planet }) => {
             <Link to={`/planet/${planet.uid}`} className="btn btn-outline-primary">
               Learn more!
             </Link>
-            <a className="btn btn-outline-warning">
+            <button className="btn btn-outline-warning" onClick={toggleFavorite}>
+            {isFavorite ? (
+              <i className="fa-solid fa-heart"></i>
+            ) : (
               <i className="fa-regular fa-heart"></i>
-            </a>
+            )}
+          </button>
           </div>
         </div>
       </div>
